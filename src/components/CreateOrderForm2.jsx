@@ -95,10 +95,12 @@ const CreateOrderForm2 = (props) => {
 
             handleSubmit(quantity, detail)
 
-            orderDetailRef.current.value = '';
-            orderQuantityRef.current.value = '';
+            dispatch(orderFormActions.setOrder({
+                "orderQuantity": '',
+                "orderInformation": ''
+            }));
 
-            orderQuantityRef.current.focus();
+            handleShowForm(false)
         }
     }
 
