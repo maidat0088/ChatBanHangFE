@@ -13,10 +13,17 @@ import { saveToStorage } from "../utils/storage";
 import { useDispatch } from "react-redux";
 import { currentUserActions } from "../redux/store";
 import UserLayout from "../layouts/UserLayout";
+import { IconButton, InputAdornment } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   const loginUser = async function (data) {
     try {
       const response = await axios({
@@ -82,11 +89,20 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Mật khẩu"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment id="ok" position="end">
+                    <IconButton onClick={handleClickShowPassword}>
+                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
             />
-
+            
             <Button
               type="submit"
               fullWidth
