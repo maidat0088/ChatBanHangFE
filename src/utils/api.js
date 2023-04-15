@@ -1,6 +1,6 @@
 // export const DOMAIN = 'https://websocket-be-production.up.railway.app';
 
-export const DOMAIN = 'https://chatbanhang-production.up.railway.app';
+export const DOMAIN = 'https://chatbanhangbe-production.up.railway.app';
 
 export const api = {
   LOGIN: `${DOMAIN}/login`,
