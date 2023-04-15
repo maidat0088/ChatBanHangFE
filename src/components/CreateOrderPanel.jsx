@@ -58,7 +58,7 @@ export default function CreateOrderPanel() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [createOrders]);
+  }, [createOrders, showForm]);
 
   //------SHOW FORM------
   const handleShowForm = (boolean) => {
