@@ -2,29 +2,33 @@ import { useEffect, useRef } from 'react'
 
 export const useClickOutside = (callback) => {
   const elRef = useRef();
-  const callbackRef = useRef();
+  const callbackRef = useRef(callback);
 
   useEffect(() => {
-    callbackRef.current = callback;
-  }, []);
+    callbackRef.current = callback
+  }, [callback])
 
   useEffect(() => {
+    console.log("useEffect")
     const handleClickOutside = e => {
-      if (
-        elRef.current &&
-        callbackRef.current &&
-        !elRef.current.contains(e.target)
-      ) {
-        callbackRef.current?.(e);
+      console.log(e)
+      console.log(elRef.current)
+      console.log(!elRef.current)
+
+      console.log(e.target)
+      if (elRef.current && !elRef.current.contains(e.target)) {
+        callbackRef.current && callbackRef.current(e);
       }
+    
     }
 
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
+
     }
-  })
+  }, [ elRef,callback])
 
   return elRef;
 }

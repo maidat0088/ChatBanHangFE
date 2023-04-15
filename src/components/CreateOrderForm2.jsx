@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { io } from "socket.io-client";
 import { orderFormActions } from "../redux/store";
+import ClickAwayListener from '@mui/base/ClickAwayListener';
 const socket = io(DOMAIN);
 
 const OrderTextField = styled(TextField)({
@@ -45,19 +46,28 @@ const CreateOrderForm2 = (props) => {
 
     let isFirstRender = true;
 
-    const handleClickOutside = (e) => {
-        if (!isFirstRender) {
-            handleShowForm(false)
-            dispatch(orderFormActions.setOrder({
-                "orderQuantity": orderQuantityRef.current.value,
-                "orderInformation": orderDetailRef.current.value
-            }));
-        } else {
-            isFirstRender = false;
-        }
-    }
+    // const handleClickOutside = (e) => {
+    //     console.log(orderForm)
 
-    const elRef = useClickOutside(handleClickOutside)
+    //     if (!isFirstRender) {
+
+    //         console.log(orderQuantityRef.current.value)
+    //         console.log(orderDetailRef.current.value)
+
+    //         dispatch(orderFormActions.setOrder({
+    //             "orderQuantity": orderQuantityRef.current.value,
+    //             "orderInformation": orderDetailRef.current.value
+    //         }));
+    //         handleShowForm(false)
+    //     } else {
+    //         isFirstRender = false;
+    //     }
+    // }
+
+    console.log("render")
+
+
+    //   const elRef =   useClickOutside( handleClickOutside)
 
     const handleOrderQuantityEnter = (event) => {
         if (event.key === 'Enter' || event.key === 13) {
@@ -100,7 +110,8 @@ const CreateOrderForm2 = (props) => {
                 "orderInformation": ''
             }));
 
-            handleShowForm(false)
+            handleShowForm(false);
+
         }
     }
 
@@ -115,59 +126,76 @@ const CreateOrderForm2 = (props) => {
         socket.emit("post-create-order", createOrderData);
     };
 
-    return (
-        <Stack ref={elRef} alignItems='center' sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "#fff",
-        }}  >
-            <FormControl sx={{ width: '85%', paddingTop: '15px', paddingBottom: '15px' }}    >
-                <OrderTextField
-                    id="input-with-icon-textfield"
-                    placeholder="Khối lượng"
-                    type="number"
-                    autoFocus
-                    defaultValue={orderForm?.orderQuantity}
-                    inputRef={orderQuantityRef}
-                    onKeyDown={handleOrderQuantityEnter}
-                    sx={
-                        {
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderRadius: '15px 15px 0px 0px',
-                                    borderBottomWidth: '0.5px',
-                                },
-                            },
-                        }
-                    }
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                kg
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+    const handleClickAway = () => {
+        if (orderQuantityRef.current.value.toString() !== orderForm.orderQuantity.toString()
+            || orderQuantityRef.current.value.toString() !== orderForm.orderInformation.toString()) {
+            dispatch(orderFormActions.setOrder({
+                "orderQuantity": orderQuantityRef.current.value,
+                "orderInformation": orderDetailRef.current.value
+            }));
+        }
+        handleShowForm(false)
+        console.log("HANDLE clICK")
+    };
 
-                <OrderTextField
-                    inputRef={orderDetailRef}
-                    onKeyDown={handleOrderDetailEnter}
-                    defaultValue={orderForm?.orderInformation}
-                    sx={
-                        {
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderTopWidth: '0.5px',
-                                    borderRadius: '0px 0px 15px 15px',
+    return (
+
+        <ClickAwayListener onClickAway={handleClickAway} mouseEvent='onClick'>
+            <Stack alignItems='center' sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "#fff",
+            }}  >
+                <FormControl sx={{ width: '85%', paddingTop: '15px', paddingBottom: '15px' }}    >
+                    <OrderTextField
+                        id="input-with-icon-textfield"
+                        placeholder="Khối lượng"
+                        type="number"
+                        autoFocus
+                        defaultValue={orderForm?.orderQuantity}
+                        inputRef={orderQuantityRef}
+                        onKeyDown={handleOrderQuantityEnter}
+                        sx={
+                            {
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderRadius: '15px 15px 0px 0px',
+                                        borderBottomWidth: '0.5px',
+                                    },
                                 },
-                            },
+                            }
                         }
-                    }
-                    id="outlined-basic" multiline={false} placeholder="Thông tin" />
-            </FormControl>
-        </Stack>
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    kg
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+
+                    <OrderTextField
+                        inputRef={orderDetailRef}
+                        onKeyDown={handleOrderDetailEnter}
+                        defaultValue={orderForm?.orderInformation}
+                        sx={
+                            {
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderTopWidth: '0.5px',
+                                        borderRadius: '0px 0px 15px 15px',
+                                    },
+                                },
+                            }
+                        }
+                        id="outlined-basic" multiline={false} placeholder="Thông tin" />
+                </FormControl>
+            </Stack>
+        </ClickAwayListener>
+
+
     )
 }
 

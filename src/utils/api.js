@@ -2,6 +2,8 @@
 
 export const DOMAIN = 'https://chatbanhangbe-production.up.railway.app';
 
+// export const DOMAIN = 'http://localhost:5000';
+
 export const api = {
   LOGIN: `${DOMAIN}/login`,
   SIGNUP: `${DOMAIN}/signup`,
