@@ -58,7 +58,7 @@ export default function CreateOrderPanel() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [createOrders]);
+  }, [createOrders, showForm]);
 
   //------SHOW FORM------
   const handleShowForm = (boolean) => {
@@ -109,7 +109,7 @@ export default function CreateOrderPanel() {
 
   return (
     <Box
-      maxHeight= {showForm ? "650px" : "700px"}
+      maxHeight={showForm ? `${window.innerHeight - 250}px` : `${window.innerHeight - 80}px`} 
       overflow="auto"
       sx={
         mediaMd
