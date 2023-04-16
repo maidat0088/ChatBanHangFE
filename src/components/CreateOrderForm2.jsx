@@ -8,7 +8,6 @@ import {
     styled
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useClickOutside } from "../hooks/useClickOutside";
 import { io } from "socket.io-client";
 import { orderFormActions } from "../redux/store";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
@@ -44,31 +43,6 @@ const CreateOrderForm2 = (props) => {
     const { currentUser } = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
 
-    let isFirstRender = true;
-
-    // const handleClickOutside = (e) => {
-    //     console.log(orderForm)
-
-    //     if (!isFirstRender) {
-
-    //         console.log(orderQuantityRef.current.value)
-    //         console.log(orderDetailRef.current.value)
-
-    //         dispatch(orderFormActions.setOrder({
-    //             "orderQuantity": orderQuantityRef.current.value,
-    //             "orderInformation": orderDetailRef.current.value
-    //         }));
-    //         handleShowForm(false)
-    //     } else {
-    //         isFirstRender = false;
-    //     }
-    // }
-
-    console.log("render")
-
-
-    //   const elRef =   useClickOutside( handleClickOutside)
-
     const handleOrderQuantityEnter = (event) => {
         if (event.key === 'Enter' || event.key === 13) {
             orderDetailRef?.current?.focus()
@@ -77,7 +51,6 @@ const CreateOrderForm2 = (props) => {
 
     const handleOrderDetailEnter = (event) => {
         if (event.key === 'Enter' || event.key === 13) {
-
             const quantity = orderQuantityRef.current.value.trim();
             const detail = orderDetailRef.current.value.trim();
 
@@ -88,7 +61,7 @@ const CreateOrderForm2 = (props) => {
                 return;
             }
 
-            if (quantity <= 0) {
+            if (isNaN(quantity) || quantity <= 0) {
                 error = "* Khối lượng phải lớn hơn 0!";
             }
 
@@ -111,7 +84,6 @@ const CreateOrderForm2 = (props) => {
             }));
 
             handleShowForm(false);
-
         }
     }
 
@@ -135,7 +107,6 @@ const CreateOrderForm2 = (props) => {
             }));
         }
         handleShowForm(false)
-        console.log("HANDLE clICK")
     };
 
     return (
@@ -194,8 +165,6 @@ const CreateOrderForm2 = (props) => {
                 </FormControl>
             </Stack>
         </ClickAwayListener>
-
-
     )
 }
 
