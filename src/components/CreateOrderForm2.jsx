@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { orderFormActions } from "../redux/store";
 import ClickAwayListener from '@mui/base/ClickAwayListener';
+import IconButton from "@mui/material/IconButton";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 const socket = io(DOMAIN);
 
 const OrderTextField = styled(TextField)({
@@ -54,24 +56,11 @@ const CreateOrderForm2 = (props) => {
             const quantity = orderQuantityRef.current.value.trim();
             const detail = orderDetailRef.current.value.trim();
 
-            let error = "";
-
-            if (quantity === "" || detail === "") {
-                alert("Vui lòng điền đầy đủ thông tin!");
-                return;
-            }
-
-            if (isNaN(quantity) || quantity <= 0) {
-                error = "* Khối lượng phải lớn hơn 0!";
-            }
-
-            if (detail.length < 5) {
-                error += "\n";
-                error += "* Thông tin tối thiểu 5 ký tự!";
-            }
-
-            if (error !== "") {
-                alert(error);
+            if (quantity === ""
+                || detail === ""
+                || isNaN(quantity)
+                || quantity <= 0
+                || detail.length < 5) {
                 orderQuantityRef.current.focus();
                 return;
             }
@@ -140,8 +129,8 @@ const CreateOrderForm2 = (props) => {
                         }
                         InputProps={{
                             endAdornment: (
-                                <InputAdornment position="end">
-                                    kg
+                                <InputAdornment position="end" >
+                                    <p style={{ fontSize: '1.2em' }}>kg</p>
                                 </InputAdornment>
                             ),
                         }}
@@ -161,7 +150,29 @@ const CreateOrderForm2 = (props) => {
                                 },
                             }
                         }
-                        id="outlined-basic" multiline={false} placeholder="Thông tin" />
+                        id="outlined-basic" multiline={false} placeholder="Thông tin"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end" >
+                                    <IconButton
+                                        onClick={() => {
+                                            console.log("Send Button Click")
+                                        }}
+                                        sx={{ padding: '0' }}
+                                    >
+                                        <ArrowUpwardIcon
+                                            sx={{
+                                                borderRadius: '50% 50%',
+                                                backgroundColor: 'green',
+                                                color: "white",
+                                                fontSize: "1em",
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }} />
                 </FormControl>
             </Stack>
         </ClickAwayListener>
